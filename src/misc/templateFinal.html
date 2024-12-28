@@ -1,0 +1,47 @@
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información Nutricional</title>
+    <style>
+      .table {
+        border-collapse: collapse;
+        width: 100%;
+        display: none; 
+      }
+
+      .table.active {
+        display: table;
+      }
+
+      .table td {
+        border: 1px solid #d3d3d3; 
+        padding: 8px;
+      }
+
+      .bg-white {
+        background-color: #ffffff;
+      }
+
+      select {
+        margin-bottom: 10px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    {1}
+    {0}
+
+    <script>
+      const tableSelector = document.getElementById("table-selector");
+      const tables = document.querySelectorAll(".table");
+
+      tableSelector.addEventListener("change", (event) => {
+        tables.forEach((table) => table.classList.remove("active"));
+        const selectedTable = document.getElementById(event.target.value);
+        selectedTable.classList.add("active");
+      });
+    </script>
+  </body>
+</html>
