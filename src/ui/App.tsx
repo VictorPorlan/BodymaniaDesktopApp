@@ -3,13 +3,15 @@ import { baseForm } from "../misc/baseForm";
 import html from "../misc/templateIndividual.html?raw"
 import finalHtml from "../misc/templateFinal.html?raw"
 import './App.css'
-import { Button, Checkbox, createTheme, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField, ThemeProvider } from '@mui/material'
+import { Button, Checkbox, createTheme, IconButton, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField, ThemeProvider } from '@mui/material'
 import { ValorNutricional } from "../misc/interfaces/valorNutricional.interface";
 import { TablaSabor } from "../misc/interfaces/tabla.interface";
+import Delete from '@mui/icons-material/Delete';
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
 
 function App() {
   const [formedHTML, setFormedHTML] =  useState("");
-  const [tablas, setTablas] = useState<TablaSabor[]>([{valoresNutricionales: baseForm, id: "1", nombre:'Sabor 1'}])
+  const [tablas, setTablas] = useState<TablaSabor[]>([{valoresNutricionales: baseForm, id: "1", nombre:'Sabor 1', ingredientes: ""}])
   const [variosSabores, setVariosSabores] = useState<boolean>(false)
   const [selectedTable, setSelectedTable] = useState("1")
 
@@ -17,10 +19,11 @@ function App() {
     palette: {
       mode: 'dark',
     },
+    
   });
 
   const resetForm = () => {
-    setTablas([{valoresNutricionales: baseForm, id: "1", nombre:"Sabor 1"}])
+    setTablas([{valoresNutricionales: baseForm, id: "1", nombre:"Sabor 1", ingredientes: ""}])
     actualizarValorExternamente(false)
     setSelectedTable("1")
     generateTable(baseForm)
@@ -43,6 +46,16 @@ function App() {
     );
   };
 
+  const setIngredientesTabla = (id: string, ingredientes: string) => {
+    console.log(ingredientes)
+    setTablas((prevTablas) =>
+      prevTablas.map((tabla) =>
+        tabla.id === id ? { ...tabla, ingredientes: ingredientes } : tabla
+      )
+    );
+  };
+
+
   const actualizarValorExternamente = (nuevoValor:boolean) => {
     setVariosSabores(nuevoValor);
   };
@@ -50,7 +63,8 @@ function App() {
   const nuevoSabor = () => {
     setTablas((prevTablas) => {
       const nextId = (prevTablas.length + 1).toString();
-      const newTabla = { valoresNutricionales: baseForm, id: nextId, nombre: 'Sabor ' + nextId };
+      const tablaCopiada = prevTablas[prevTablas.length - 1]
+      const newTabla = { ...tablaCopiada, id: nextId, nombre: 'Sabor ' + nextId };
       const updatedTablas = [...prevTablas, newTabla];
       
       // Actualizar selectedTable usando el nuevo ID
@@ -60,14 +74,14 @@ function App() {
     });
   };
 
-  const setDataAndTable = (order: number, valorPorcion: string, valorCDR: string) => {
+  const setDataAndTable = (order: number, label: string,valorPorcion: string, valorCDR: string, unidadPorcion: string, unidadCDR:string) => {
     // Actualiza el estado de las tablas
     setTablas((prevTablas) => {
       const updatedTablas = prevTablas.map((tabla) => {
         if (tabla.id === selectedTable) {
           const updatedValoresNutricionales = tabla.valoresNutricionales.map((row) =>
             row.order === order
-              ? { ...row, valorPorcion, valorCDR }
+              ? { ...row, label, valorPorcion, valorCDR, unidadPorcion, unidadCDR}
               : row 
           );
           return {
@@ -84,12 +98,71 @@ function App() {
     if (currentTable) {
       const updatedTableData = currentTable.valoresNutricionales.map((row) =>
         row.order === order
-          ? { ...row, valorPorcion, valorCDR }
+          ? { ...row, label, valorPorcion, valorCDR, unidadPorcion, unidadCDR }
           : row
       );
       generateTable(updatedTableData);
     }
   };
+
+  const cambiarBoldValorNutricional = (
+    order: number,
+): void => {
+    // Actualizar las tablas
+    const tablasActualizadas = tablas.map((tabla) => {
+        if (tabla.id === selectedTable) {
+            // Modificar el valor nutricional que coincide con el order
+            const valoresActualizados = tabla.valoresNutricionales.map((valor) => {
+                if (valor.order === order) {
+                    return {
+                        ...valor,
+                        bold: !valor.bold, // Cambiar el estado de bold
+                    };
+                }
+                return valor;
+            });
+            return {
+                ...tabla,
+                valoresNutricionales: valoresActualizados,
+            };
+        }
+        return tabla;
+    });
+
+    setTablas(tablasActualizadas);
+
+    const tablaModificada = tablasActualizadas.find((tabla) => tabla.id === selectedTable);
+
+    if (tablaModificada) {
+        generateTable(tablaModificada.valoresNutricionales);
+    } else {
+        console.error("No se encontró la tabla modificada para pasar a generateTable.");
+    }
+}
+
+  const deleteRow = (order: number) => {
+    const tablasActualizadas = tablas.map((tabla) => {
+      if (tabla.id === selectedTable) {
+          const valoresActualizados = tabla.valoresNutricionales.filter(
+              (valor) => valor.order !== order
+          );
+          return {
+              ...tabla,
+              valoresNutricionales: valoresActualizados,
+          };
+      }
+      return tabla;
+  });
+
+  setTablas(tablasActualizadas);
+  const tablaModificada = tablasActualizadas.find((tabla) => tabla.id === selectedTable);
+
+  if (tablaModificada) {
+      generateTable(tablaModificada.valoresNutricionales);
+  } else {
+      console.error("No se encontró la tabla modificada para pasar a generateTable.");
+  }
+};
   
   const generateForm = () => {
     return (
@@ -141,30 +214,86 @@ function App() {
         {tablas.find((x) => x.id === selectedTable)?.valoresNutricionales.map((x) => {
           return (
             <div className="row" key={x.order}>
-              <div className="label" >{x.label}</div>
-              <div className="porcion">
+              <div className="label" >   
                 <TextField
-                  value={x.valorPorcion}
-                  slotProps={ x.unidadPorcion ?{
-                    input: {
-                      endAdornment: <InputAdornment position="end">{x.unidadPorcion}</InputAdornment>,
-                    },
-                  } : {}}
+                  value={x.label}
                   hiddenLabel
                   id="filled-hidden-label-small"
                   variant="filled"
                   size="small"
+                  slotProps={ x.unidadPorcion ?{
+                    input: {
+                      endAdornment:<InputAdornment position="end">
+                          <IconButton
+                            onClick={() => deleteRow(x.order)}
+                            edge="end"
+                          >
+                            <Delete></Delete>
+                          </IconButton>
+                          <IconButton
+                            onClick={() => cambiarBoldValorNutricional(x.order)}
+                            edge="end"
+                          >
+                            <FormatBoldIcon color={x.bold ? "info" : "disabled"}></FormatBoldIcon>
+                          </IconButton>
+                        </InputAdornment>
+                      
+                    },
+                  } : {}}
                   onChange={(e) => {
-                    setDataAndTable(x.order, e.target.value, x.valorCDR)
+                    setDataAndTable(x.order, e.target.value, x.valorPorcion, x.valorCDR, x.unidadPorcion, x.unidadCDR)
                   }}
-                />
+                /></div>
+              <div className="porcion">
+              <TextField
+                value={x.valorPorcion}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <TextField
+                          value={x.unidadPorcion}
+                          onChange={(e) => {
+                            setDataAndTable(x.order, x.label, x.valorPorcion, x.valorCDR, e.target.value, x.unidadCDR);
+                          }}
+                          variant="standard"
+                          size="small"
+                          inputProps={{
+                            style: { textAlign: "center", width: "40px" }, 
+                          }}
+                        />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                hiddenLabel
+                id="filled-hidden-label-small"
+                variant="filled"
+                size="small"
+                onChange={(e) => {
+                  setDataAndTable(x.order, x.label, e.target.value, x.valorCDR, x.unidadPorcion, x.unidadCDR);
+                }}
+              />
               </div>
               <div className="cdr">
                 <TextField
                   value={x.valorCDR}
                   slotProps={ x.unidadCDR ?{
                     input: {
-                      endAdornment: <InputAdornment position="end">{x.unidadCDR}</InputAdornment>,
+                      endAdornment:   
+                      <InputAdornment position="end">
+                      <TextField
+                        value={x.unidadCDR}
+                        onChange={(e) => {
+                          setDataAndTable(x.order, x.label, x.valorPorcion, x.valorCDR, x.unidadPorcion, e.target.value);
+                        }}
+                        variant="standard"
+                        size="small"
+                        inputProps={{
+                          style: { textAlign: "center", width: "40px" }, 
+                        }}
+                      />
+                    </InputAdornment>,
                     },
                   } : {}}
                   hiddenLabel
@@ -172,37 +301,58 @@ function App() {
                   variant="filled"
                   size="small"
                   onChange={(e) => {
-                    setDataAndTable(x.order, x.valorPorcion, e.target.value)
+                    setDataAndTable(x.order, x.label, x.valorPorcion, e.target.value, x.unidadPorcion, x.unidadCDR)
                   }}
                 />
               </div>
             </div>
           )
         })}
+        <div className="row">
+          <TextField
+                  value={tablas.find((x) => x.id === selectedTable)?.ingredientes}
+                  id="filled-hidden-label-small"
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  className="full-row"
+                  style={{width:'100%', marginTop: 50}}
+                  label="Ingredientes"
+                  onChange={(e) => {
+                    setIngredientesTabla(selectedTable, e.target.value)
+                  }}
+
+            />
+        </div>
       </div>
     )
   }
 
-  const copyToClipboard = (saveToFile: boolean = false) => {
+  const copyToClipboard = () => {
     let finalTable = ''
     let htmlFinalCopy = finalHtml
     let selector = tablas.length > 1 ? `
-      <select id="table-selector">
+        <select id="flavor-selector" class="flavor-selector">
         ${tablas.map( (tabla) => `<option value="${tabla.id}">${tabla.nombre}</option>`)}
       </select>` : ''
     tablas.forEach((tabla) => {
       let tablaCompost = 
       `
-      <table class="table${tabla.id === "1" ? ' active' : ''}" id="${tabla.id}">
-      <tbody>
-        <tr>
-          <td class="bg-white">&nbsp;</td>
-          <td>Por porción</td>
-          <td>%CDR</td>
-        </tr>
-        <tr>
-          <td colspan="3">Información nutricional para el producto en sabor neutro.</td>
-        </tr>
+      <div class="table${tabla.id === "1" ? ' active' : ''}" id="${tabla.id}">
+      <table class="nutrition-table">
+      <thead>
+      <tr>
+
+          <th>Información nutricional</th>
+
+          <th>100gr</th>
+
+          <th>Por servicio</th>
+
+      </tr>
+      </thead>
+      <tbody id="nutrition-table">
+
         ${tabla.valoresNutricionales.map((valorNutri) => `
         <tr>
           <td>
@@ -220,12 +370,19 @@ function App() {
         `).join('')}
       </tbody>
       </table>
+      <div class="ingredients">
+          <h2>Ingredientes</h2>
+          <p>
+            ${tabla.ingredientes}
+          </p>
+      </div>
+      </div>
      `
-
       finalTable = finalTable + tablaCompost
     })
     htmlFinalCopy = htmlFinalCopy.replace("{1}", selector)
     htmlFinalCopy = htmlFinalCopy.replace("{0}", finalTable)
+    htmlFinalCopy = htmlFinalCopy.replace("{2}", tablas.length > 1 ? "Elige un sabor" : "Información Nutricional")
     navigator.clipboard.writeText(htmlFinalCopy)
     }
 
@@ -233,7 +390,6 @@ function App() {
     let finalTable = ''
     let htmlCopy = html
     const tablaFound = tablas.find((x) => x.id === selectedTable)?.valoresNutricionales;
-
     const valoresNutricionales = baseFormTemp || tablaFound || [];
     valoresNutricionales.forEach((x) => {
       let row = `
@@ -267,7 +423,7 @@ function App() {
         <div className="right">
         <div dangerouslySetInnerHTML={{__html: formedHTML}} >
         </div>
-        <Button color="success" variant="contained" onClick={() => copyToClipboard(false)}>Copiar al portapapeles</Button>
+        <Button color="success" variant="contained" onClick={copyToClipboard}>Copiar al portapapeles</Button>
         </div>
       </div>
       </ThemeProvider>

@@ -2,22 +2,13 @@ import { ValorNutricional } from "./interfaces/valorNutricional.interface";
 
 export const baseForm: ValorNutricional[] = [
     {
-      label: "Energía",
-      bold: true,
-      order: 1,
-      valorPorcion: "",
-      valorCDR: "",
-      unidadPorcion: "kJ",
-      unidadCDR: "%",
-    },
-    {
-      label: "Energía",
+      label: "Valor energético",
       bold: true,
       order: 2,
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "kcal",
-      unidadCDR: "%",
+      unidadCDR: "kcal",
     },
     {
       label: "Grasas",
@@ -26,7 +17,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "de las cuales saturadas",
@@ -35,7 +26,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "Carbohidratos",
@@ -44,7 +35,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "de los cuales azúcares",
@@ -53,7 +44,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "Fibra",
@@ -62,7 +53,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "Proteína",
@@ -71,7 +62,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
     {
       label: "Sal",
@@ -80,7 +71,7 @@ export const baseForm: ValorNutricional[] = [
       valorPorcion: "",
       valorCDR: "",
       unidadPorcion: "g",
-      unidadCDR: "%",
+      unidadCDR: "g",
     },
   ];
   

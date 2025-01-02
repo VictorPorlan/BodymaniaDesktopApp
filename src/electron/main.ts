@@ -5,7 +5,7 @@ import { isDev } from './util.js';
 type test = string
 
 app.on("ready", () => {
-    const mainWindow = new BrowserWindow({minWidth: 1400, minHeight: 900});
+    const mainWindow = new BrowserWindow({minWidth: 1600, minHeight: 900});
     if(isDev()){
         mainWindow.loadURL('http://localhost:5123')
     }

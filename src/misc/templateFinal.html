@@ -1,40 +1,162 @@
+<!DOCTYPE html>
+
 <html lang="es">
-  <head>
+
+<head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Información Nutricional</title>
+
+    <title>Selector de Sabores</title>
+
     <style>
-      .table {
-        border-collapse: collapse;
-        width: 100%;
-        display: none; 
-      }
+        .table.active {
+            display: table;
+        }
 
-      .table.active {
-        display: table;
-      }
+        body {
 
-      .table td {
-        border: 1px solid #d3d3d3; 
-        padding: 8px;
-      }
+            font-family: 'Arial', sans-serif;
 
-      .bg-white {
-        background-color: #ffffff;
-      }
+            background-color: #f7f7f7;
 
-      select {
-        margin-bottom: 10px;
-        padding: 5px;
-      }
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .card {
+
+            background: #fff;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+            max-width: 350px;
+
+            width: 100%;
+
+            padding: 20px;
+
+            text-align: center;
+
+            margin: 20px auto;
+
+        }
+
+
+        .card h1 {
+
+            font-size: 18px;
+
+            color: #333;
+
+            margin-bottom: 20px;
+
+        }
+
+        .table {
+          border-collapse: collapse;
+          width: 100%;
+          display: none; 
+        }
+
+        .flavor-selector {
+
+            width: 100%;
+
+            padding: 8px;
+
+            font-size: 14px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .nutrition-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 14px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .nutrition-table th,
+
+        .nutrition-table td {
+
+            text-align: left;
+
+            padding: 6px;
+
+        }
+
+
+        .nutrition-table th {
+
+            background-color: #000000;
+
+            color: #fff;
+
+        }
+
+
+        .nutrition-table td {
+
+            background-color: #f9f9f9;
+
+            border-bottom: 1px solid #ccc;
+
+        }
+
+
+        .nutrition-table tr:last-child td {
+
+            border-bottom: none;
+
+        }
+
+        .ingredients {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            text-align: left;
+            line-height: 1.5;
+        }
+
     </style>
-  </head>
-  <body>
-    {1}
-    {0}
 
+</head>
+
+<body>
+    
+    <div class="card">
+
+        <h1>{2}</h1>
+        
+        {1}
+        
+        {0}
+
+    </div>
     <script>
-      const tableSelector = document.getElementById("table-selector");
+      const tableSelector = document.getElementById("flavor-selector");
       const tables = document.querySelectorAll(".table");
 
       tableSelector.addEventListener("change", (event) => {
@@ -43,5 +165,7 @@
         selectedTable.classList.add("active");
       });
     </script>
-  </body>
+</body>
+
 </html>
+

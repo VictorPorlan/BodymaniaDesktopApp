@@ -1,40 +1,150 @@
 <!DOCTYPE html>
+
 <html lang="es">
-  <head>
+
+<head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Información Nutricional</title>
+
     <style>
-      /* Estilo en línea para bordes de la tabla */
-      .table {
-        border-collapse: collapse;
-        width: 100%;
-      }
 
-      .table td {
-        border: 1px solid #d3d3d3;
-        /* Gris claro */
-        padding: 8px;
-      }
+        body {
 
-      .bg-white {
-        background-color: #ffffff;
-      }
+            font-family: 'Arial', sans-serif;
+
+            background-color: #f7f7f7;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .card {
+
+            background: #fff;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+            max-width: 350px;
+
+            width: 100%;
+
+            padding: 20px;
+
+            text-align: center;
+
+            margin: 20px auto;
+
+        }
+
+
+        .card h1 {
+
+            font-size: 18px;
+
+            color: #333;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .nutrition-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            font-size: 14px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .nutrition-table th,
+
+        .nutrition-table td {
+
+            text-align: left;
+
+            padding: 6px;
+
+        }
+
+
+        .nutrition-table th {
+
+            background-color: #000000;
+
+            color: #fff;
+
+        }
+
+
+        .nutrition-table td {
+
+            background-color: #f9f9f9;
+
+            border-bottom: 1px solid #ccc;
+            color: black
+
+        }
+
+
+        .nutrition-table tr:last-child td {
+
+            border-bottom: none;
+            color: black
+        }
+
     </style>
-  </head>
-  <body>
-    <table class="table">
-      <tbody>
-        <tr>
-          <td class="bg-white">&nbsp;</td>
-          <td>Por porción</td>
-          <td>%CDR</td>
-        </tr>
-        <tr>
-          <td colspan="3">Información nutricional para el producto en sabor neutro.</td>
-        </tr>
-        {0}
-      </tbody>
-    </table>
-  </body>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>Información Nutricional</h1>
+
+        <table class="nutrition-table">
+
+            <thead>
+
+                <tr>
+
+                  <th>Información nutricional</th>
+
+                  <th>100gr</th>
+
+                  <th>Por servicio</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="nutrition-table">
+
+                {0}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
 </html>
+
