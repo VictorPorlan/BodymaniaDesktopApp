@@ -343,7 +343,7 @@ function App() {
       <thead>
       <tr>
 
-          <th>Información nutricional</th>
+          <th class="grande">Información nutricional</th>
 
           <th>100gr</th>
 
