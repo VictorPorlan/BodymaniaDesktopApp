@@ -43,7 +43,7 @@
 .left {
   display: grid;
   gap: 4px;
-  grid-template-rows: repeat(9, 1fr); 
+  /* grid-template-rows: repeat(9, 1fr);  */
 }
 
 .row {

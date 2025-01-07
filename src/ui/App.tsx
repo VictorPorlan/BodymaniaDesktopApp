@@ -371,7 +371,7 @@ function App() {
       </tbody>
       </table>
       <div class="ingredients">
-          <h2>Ingredientes</h2>
+          <h6>Ingredientes</h6>
           <p>
             ${tabla.ingredientes}
           </p>
